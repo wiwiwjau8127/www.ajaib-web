@@ -1,1 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ajaib - Investasi dengan Mudah</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom, #2870f0, #003da6);
+      color: white;
+      text-align: center;
+      overflow-x: hidden;
+    }
 
+    .fade-out {
+      opacity: 0;
+      transition: opacity 0.8s ease-out;
+    }
+
+    .logo {
+      margin: 20px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .logo img {
+      height: 68px;
+    }
+
+    .help-icon {
+      font-size: 24px;
+      color: white;
+      background: #ffffff44;
+      border-radius: 50%;
+      padding: 4px 10px;
+    }
+
+    .hero-image {
+      margin-top: 110px;
+    }
+
+    .hero-image img {
+      max-width: 80%;
+      height: auto;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      margin: 10px 20px 30px;
+    }
+
+    .dots {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .button {
+      display: block;
+      width: 90%;
+      max-width: 400px;
+      margin: 10px auto;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      margin-top: 30px;
+    }
+
+    .google-btn {
+      background-color: white;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .email-btn {
+      background-color: white;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .google-btn img,
+    .email-btn img {
+      height: 20px;
+      margin-right: 15px;
+    }
+
+    #loadingPage {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      color: black;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #loadingPage iframe {
+      width: 150px;
+      height: 150px;
+      border: none;
+    }
+
+    #mainContent {
+      transition: opacity 0.8s ease-out;
+    }
+  </style>
+</head>
+<body>
+
+<div id="mainContent">
+  <div class="logo">
+    <img src="https://i.imghippo.com/files/HLWt4821E.webp" alt="Ajaib Logo">
+    <div class="help-icon">?</div>
+  </div>
+
+  <div class="hero-image">
+    <img id="slider" src="https://i.imghippo.com/files/VN3622mUc.webp" alt="Investasi">
+  </div>
+
+  <div class="title">Investasi dengan mudah</div>
+  <div class="subtitle">Satu akun untuk semua jenis investasi. Apapun asetnya, semua bisa di Ajaib</div>
+  <div class="dots">••••</div>
+
+  <button class="button google-btn" onclick="startLoading()">
+    <img src="https://www.google.com/favicon.ico" alt="Google Icon"> Masuk/Daftar dengan Google
+  </button>
+  <button class="button email-btn" onclick="startLoading()">
+    <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" alt="Email Icon"> Masuk/Daftar dengan Email
+  </button>
+</div>
+
+<div id="loadingPage">
+  <iframe src="https://lottie.host/embed/d3ffbad0-b0d3-4279-bc90-b14019537bd6/msgti3STmj.lottie" title="Loading Animation"></iframe>
+  <p></p>
+</div>
+
+<script>
+  const images = [
+    "https://i.imghippo.com/files/VN3622mUc.webp",
+    "https://i.imghippo.com/files/gCmM2549fQo.webp",
+    "https://i.imghippo.com/files/xb3531vcM.webp",
+    "https://i.imghippo.com/files/DHRR1769Da.webp"
+  ];
+
+  let currentIndex = 0;
+  const slider = document.getElementById('slider');
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % images.length;
+    slider.src = images[currentIndex];
+  }, 3000);
+
+  function startLoading() {
+    const main = document.getElementById('mainContent');
+    const loading = document.getElementById('loadingPage');
+    
+    // Tambahkan kelas fade-out
+    main.classList.add('fade-out');
+
+    // Tampilkan loading setelah transisi
+    setTimeout(() => {
+      main.style.display = 'none';
+      loading.style.display = 'flex';
+    }, 800);
+
+    // Arahkan ke halaman selanjutnya setelah 5 detik
+    setTimeout(() => {
+      window.location.href = "lanjut-masuk.html"; // Ganti ini
+    }, 5800);
+  }
+</script>
+
+</body>
+</html>
